@@ -116,12 +116,16 @@ pnpm-debug.log*
 !.env.example
 
 # -----------------------------------------------------------------------------
-# Codex / agent notes
-# -----------------------------------------------------------------------------
-# Keep repository-level instructions and skills tracked:
-#   AGENTS.md
-#   .agents/skills/**/SKILL.md
 #
-# Ignore only personal scratch files if you create them.
+# Local agent / coding-assistant files
+# -----------------------------------------------------------------------------
+AGENTS.md
+AGENTS.md.meta
+.agents/
+.agents.meta
+.codex/
+.codex.meta
 .agent-scratch/
+.agent-scratch.meta
 .codex-scratch/
+.codex-scratch.meta
