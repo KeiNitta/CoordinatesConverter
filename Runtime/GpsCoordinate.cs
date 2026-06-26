@@ -2,7 +2,10 @@ using System;
 
 namespace ntk.GeospatialCoordinates
 {
-    /// <summary>WGS84 geographic coordinate expressed in degrees and ellipsoidal metres.</summary>
+    /// <summary>
+    /// Geographic coordinate expressed in degrees and ellipsoidal metres.
+    /// Local ENU interprets it as WGS84; Japan Plane Rectangular interprets latitude and longitude using the selected <see cref="JapanPlaneRectangularDatum"/>.
+    /// </summary>
     public readonly struct GpsCoordinate
     {
         /// <summary>Latitude in degrees, in the inclusive range [-90, 90].</summary>
@@ -12,7 +15,7 @@ namespace ntk.GeospatialCoordinates
         /// <summary>Ellipsoidal height in metres.</summary>
         public double HeightMeters { get; }
 
-        /// <summary>Creates a validated GPS coordinate.</summary>
+        /// <summary>Creates a validated geographic coordinate.</summary>
         public GpsCoordinate(double latitudeDegrees, double longitudeDegrees, double heightMeters = 0d)
         {
             if (!IsFinite(latitudeDegrees) || latitudeDegrees < -90d || latitudeDegrees > 90d)

@@ -5,7 +5,7 @@ namespace ntk.GeospatialCoordinates
     {
         /// <summary>WGS84 ECEF delta transformed to local east, up, north axes.</summary>
         LocalEnu = 0,
-        /// <summary>Japan Plane Rectangular Coordinate System (JGD/GRS80 compatible).</summary>
+        /// <summary>Japan Plane Rectangular Coordinate System using the selected Japan Plane Rectangular datum.</summary>
         JapanPlaneRectangular = 1
     }
 }

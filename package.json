@@ -5,8 +5,23 @@
   "description": "WGS84 local ENU and Japan Plane Rectangular coordinate conversion for Unity.",
   "unity": "2020.3",
   "author": { "name": "ntk" },
-  "testables": [
-    "ntk.GeospatialCoordinates.Tests"
+  "files": [
+    "Runtime",
+    "Runtime.meta",
+    "Editor",
+    "Editor.meta",
+    "Tests",
+    "Tests.meta",
+    "Samples~",
+    "Samples~.meta",
+    "Documentation~",
+    "README.md",
+    "README.md.meta",
+    "CHANGELOG.md",
+    "CHANGELOG.md.meta",
+    "LICENSE.md",
+    "LICENSE.md.meta",
+    "package.json.meta"
   ],
   "samples": [
     { "displayName": "Basic Usage", "description": "Create and use a coordinate converter.", "path": "Samples~/BasicUsage" },

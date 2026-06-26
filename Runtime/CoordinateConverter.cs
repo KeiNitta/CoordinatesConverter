@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ntk.GeospatialCoordinates
 {
-    /// <summary>Converts validated GPS coordinates to Unity world coordinates relative to a fixed origin.</summary>
+    /// <summary>Converts validated geographic coordinates to Unity coordinates using Local ENU or Japan Plane Rectangular mode.</summary>
     public sealed class CoordinateConverter
     {
         private const double DegreesToRadians = Math.PI / 180d;
@@ -24,27 +24,37 @@ namespace ntk.GeospatialCoordinates
 
         /// <summary>Transformation mode selected for this converter.</summary>
         public CoordinateTransformationMode Mode { get; }
-        /// <summary>Fixed coordinate used as the local origin and height reference.</summary>
+        /// <summary>
+        /// Fixed WGS84 coordinate used as the local origin and height reference in <see cref="CoordinateTransformationMode.LocalEnu"/> mode.
+        /// It is ignored in Japan Plane Rectangular mode and is the default coordinate when using <see cref="CreateJapanPlaneRectangular"/>.
+        /// </summary>
         public GpsCoordinate Origin => origin;
         /// <summary>Selected Japan zone. It is relevant only in <see cref="CoordinateTransformationMode.JapanPlaneRectangular"/> mode.</summary>
         public JapanPlaneRectangularZone JapanZone { get; }
-        /// <summary>Selected datum for Japan Plane Rectangular mode.</summary>
+        /// <summary>Selected datum for Japan Plane Rectangular mode. Input latitude and longitude must use this datum.</summary>
         public JapanPlaneRectangularDatum JapanDatum { get; }
 
-        /// <summary>Creates a converter with a fixed origin.</summary>
+        /// <summary>
+        /// Creates a converter with a fixed origin for Local ENU mode, or a Japan Plane Rectangular converter for backwards compatibility.
+        /// The origin is ignored and is not converted in Japan Plane Rectangular mode; use <see cref="CreateJapanPlaneRectangular"/> for new Japan Plane Rectangular code.
+        /// </summary>
         public CoordinateConverter(GpsCoordinate origin, CoordinateTransformationMode mode = CoordinateTransformationMode.LocalEnu, JapanPlaneRectangularZone japanZone = JapanPlaneRectangularZone.IX, JapanPlaneRectangularDatum japanDatum = JapanPlaneRectangularDatum.Jgd2011Grs80)
         {
             if (mode != CoordinateTransformationMode.LocalEnu && mode != CoordinateTransformationMode.JapanPlaneRectangular)
                 throw new ArgumentOutOfRangeException(nameof(mode));
-            if ((int)japanZone < (int)JapanPlaneRectangularZone.I || (int)japanZone > (int)JapanPlaneRectangularZone.XIX)
-                throw new ArgumentOutOfRangeException(nameof(japanZone));
-            if (japanDatum != JapanPlaneRectangularDatum.Jgd2011Grs80 && japanDatum != JapanPlaneRectangularDatum.TokyoDatumBessel)
-                throw new ArgumentOutOfRangeException(nameof(japanDatum));
+            ValidateJapanPlaneRectangularArguments(japanZone, japanDatum);
 
-            this.origin = origin;
             Mode = mode;
             JapanZone = japanZone;
             JapanDatum = japanDatum;
+            if (mode == CoordinateTransformationMode.JapanPlaneRectangular)
+            {
+                this.origin = origin;
+                planeProjection = new JapanPlaneRectangularProjection(japanZone, japanDatum);
+                return;
+            }
+
+            this.origin = origin;
             ToEcef(origin, Wgs84SemiMajorAxis, Wgs84InverseFlattening, out originEcefX, out originEcefY, out originEcefZ);
             var latitude = origin.LatitudeDegrees * DegreesToRadians;
             var longitude = origin.LongitudeDegrees * DegreesToRadians;
@@ -52,11 +62,30 @@ namespace ntk.GeospatialCoordinates
             cosOriginLatitude = Math.Cos(latitude);
             sinOriginLongitude = Math.Sin(longitude);
             cosOriginLongitude = Math.Cos(longitude);
-            planeProjection = mode == CoordinateTransformationMode.JapanPlaneRectangular
-                ? new JapanPlaneRectangularProjection(japanZone, japanDatum) : null;
         }
 
-        /// <summary>Converts a GPS coordinate to Unity coordinates. Unity axes are X=east, Y=up, Z=north.</summary>
+        /// <summary>
+        /// Creates a Japan Plane Rectangular converter without a local origin.
+        /// Input latitude and longitude must already use <paramref name="japanDatum"/>; this factory does not perform a datum transformation.
+        /// </summary>
+        public static CoordinateConverter CreateJapanPlaneRectangular(JapanPlaneRectangularZone japanZone = JapanPlaneRectangularZone.IX, JapanPlaneRectangularDatum japanDatum = JapanPlaneRectangularDatum.Jgd2011Grs80)
+        {
+            return new CoordinateConverter(japanZone, japanDatum);
+        }
+
+        private CoordinateConverter(JapanPlaneRectangularZone japanZone, JapanPlaneRectangularDatum japanDatum)
+        {
+            ValidateJapanPlaneRectangularArguments(japanZone, japanDatum);
+            Mode = CoordinateTransformationMode.JapanPlaneRectangular;
+            JapanZone = japanZone;
+            JapanDatum = japanDatum;
+            planeProjection = new JapanPlaneRectangularProjection(japanZone, japanDatum);
+        }
+
+        /// <summary>
+        /// Converts a geographic coordinate. Local ENU expects WGS84 input and maps east/up/north to Unity X/Y/Z.
+        /// Japan Plane Rectangular expects latitude and longitude in <see cref="JapanDatum"/> and maps projected east/height/north to Unity X/Y/Z.
+        /// </summary>
         public Vector3 ToUnity(GpsCoordinate coordinate)
         {
             if (Mode == CoordinateTransformationMode.JapanPlaneRectangular)
@@ -73,6 +102,14 @@ namespace ntk.GeospatialCoordinates
             var north = -sinOriginLatitude * cosOriginLongitude * dx - sinOriginLatitude * sinOriginLongitude * dy + cosOriginLatitude * dz;
             var up = cosOriginLatitude * cosOriginLongitude * dx + cosOriginLatitude * sinOriginLongitude * dy + sinOriginLatitude * dz;
             return new Vector3((float)east, (float)up, (float)north);
+        }
+
+        private static void ValidateJapanPlaneRectangularArguments(JapanPlaneRectangularZone japanZone, JapanPlaneRectangularDatum japanDatum)
+        {
+            if ((int)japanZone < (int)JapanPlaneRectangularZone.I || (int)japanZone > (int)JapanPlaneRectangularZone.XIX)
+                throw new ArgumentOutOfRangeException(nameof(japanZone));
+            if (japanDatum != JapanPlaneRectangularDatum.Jgd2011Grs80 && japanDatum != JapanPlaneRectangularDatum.TokyoDatumBessel)
+                throw new ArgumentOutOfRangeException(nameof(japanDatum));
         }
 
         private static void ToEcef(GpsCoordinate coordinate, double semiMajorAxis, double inverseFlattening, out double x, out double y, out double z)
