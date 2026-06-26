@@ -4,7 +4,9 @@
 
 Local ENU uses WGS84 (`a = 6378137.0`, inverse flattening `298.257223563`) and maps east/up/north to Unity X/Y/Z.
 
-Japan Plane Rectangular mode uses the GSI Gauss-Krüger transverse-Mercator series with GRS80 inverse flattening `298.257222101`, scale factor 0.9999, and zones I–XIX. It maps projected east/north to Unity X/Z. Y is the coordinate ellipsoidal-height difference from the converter origin.
+Japan Plane Rectangular mode uses the GSI Gauss-Krüger transverse-Mercator series with GRS80 inverse flattening `298.257222101`, scale factor 0.9999, and zones I–XIX. It maps projected east/north to Unity X/Z. Y is the input coordinate's ellipsoidal height; origin height is not used.
+
+Calculation reference: [Geospatial Information Authority of Japan (GSI), plane rectangular coordinate system reference PDF (Japanese)](https://www.gsi.go.jp/common/000061216.pdf). This package is an independent implementation, not GSI software.
 
 The supplied zone-IX reference test uses the GSI forward-projection example and permits 1 m to account for published-value rounding. For a consuming Unity project, import the **Runtime Tests** sample in Package Manager; Unity places it beneath `Assets/Samples`, where it appears automatically in **Window > General > Test Runner > EditMode**. This does not require a consuming-project manifest modification. Confirm compile status in the Console and, for import validation, add the package by local disk path in Package Manager.
 
@@ -20,4 +22,4 @@ The **Runtime Tests** sample contains only the test source and asmdef required b
 
 Add **Geospatial Coordinates > Coordinate Converter** to any GameObject. `CoordinateConverterComponent` exposes origin latitude, longitude, ellipsoidal height, mode, and Japan zone in the Inspector. Its **Current GPS coordinate** fields accept the point to convert. Assign **Target** and enable **Apply Current Coordinate On Start** to set its `localPosition` automatically in Play Mode. If Target is empty, the component moves its own GameObject. From code, call `ToUnity(GpsCoordinate)`, `SetCurrentCoordinate`, `ConvertCurrentCoordinate`, or `ApplyCurrentCoordinate`. If changing the origin, mode, or zone at runtime, call `Rebuild()` before converting the next point.
 
-The Inspector shows **Japan Zone** only when the mode is **Japan Plane Rectangular**. Local ENU does not use that setting.
+The Inspector shows **Japan Zone** only when the mode is **Japan Plane Rectangular** and hides Origin because that mode does not use it. Local ENU shows Origin and does not use Japan Zone.

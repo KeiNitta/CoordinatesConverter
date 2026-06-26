@@ -36,7 +36,7 @@ namespace ntk.GeospatialCoordinates
         /// <summary>Configured Japan Plane Rectangular zone. It is ignored in Local ENU mode.</summary>
         public JapanPlaneRectangularZone JapanZone => japanZone;
 
-        /// <summary>Configured fixed GPS origin.</summary>
+        /// <summary>Configured fixed GPS origin. Height is used only in Local ENU mode.</summary>
         public GpsCoordinate Origin => new GpsCoordinate(originLatitudeDegrees, originLongitudeDegrees, originHeightMeters);
 
         /// <summary>Current GPS coordinate configured in the Inspector or with <see cref="SetCurrentCoordinate"/>.</summary>

@@ -28,7 +28,7 @@ var position = converterComponent.ToUnity(35.681300d, 139.767200d, 42d);
 
 The component also has **Current GPS coordinate** fields. Enter the latitude, longitude, and ellipsoidal height there, assign an optional **Target**, and enable **Apply Current Coordinate On Start** to set its `localPosition` automatically when Play starts. If Target is empty, the component's own GameObject is moved. From code, use `SetCurrentCoordinate(gps)`, `ConvertCurrentCoordinate()`, or `ApplyCurrentCoordinate()`.
 
-**Japan Zone** is shown and used only when the mode is **Japan Plane Rectangular**. It is not used by Local ENU.
+**Japan Zone** is shown and used only when the mode is **Japan Plane Rectangular**. In that mode, the component hides Origin because Japan Plane Rectangular X/Y/Z does not use it. Local ENU uses Origin and does not use Japan Zone.
 
 Call `Rebuild()` after changing the origin, mode, or zone from code. `ToUnity` rebuilds automatically if it is called before `Awake`.
 
@@ -41,7 +41,11 @@ var converter = new CoordinateConverter(origin,
 Vector3 position = converter.ToUnity(gps);
 ```
 
-The GRS80/JGD-compatible GSI transverse-Mercator formulation supports zones I through XIX. Unity maps `X = projected easting`, `Y = gps.HeightMeters - origin.HeightMeters`, and `Z = projected northing`. Plane coordinates are referenced to the selected zone origin, not the supplied converter origin.
+The GRS80/JGD-compatible GSI transverse-Mercator formulation supports zones I through XIX. Unity maps `X = projected easting`, `Y = gps.HeightMeters`, and `Z = projected northing`. Plane coordinates are referenced to the selected zone origin, not the supplied converter origin; origin height is not used in this mode.
+
+## References
+
+The Japan Plane Rectangular implementation follows the Geospatial Information Authority of Japan (GSI) material for the plane rectangular coordinate system: [GSI reference PDF (Japanese)](https://www.gsi.go.jp/common/000061216.pdf). It uses the document's GRS80-compatible ellipsoid, the `0.9999` scale factor, zone origins I–XIX, and the Gauss-Krüger / transverse-Mercator forward-projection formulation. This package is an independent implementation and is not affiliated with GSI.
 
 ## Precision
 

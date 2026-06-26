@@ -55,7 +55,7 @@ namespace ntk.GeospatialCoordinates
             if (Mode == CoordinateTransformationMode.JapanPlaneRectangular)
             {
                 planeProjection.Project(coordinate, out var northing, out var easting);
-                return new Vector3((float)easting, (float)(coordinate.HeightMeters - origin.HeightMeters), (float)northing);
+                return new Vector3((float)easting, (float)coordinate.HeightMeters, (float)northing);
             }
 
             ToEcef(coordinate, Wgs84SemiMajorAxis, Wgs84InverseFlattening, out var x, out var y, out var z);

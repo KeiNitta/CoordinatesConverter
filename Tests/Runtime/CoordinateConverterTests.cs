@@ -29,14 +29,14 @@ namespace ntk.GeospatialCoordinates.Tests
         }
 
         [Test]
-        public void JapanPlaneRectangular_ZoneOriginIsZeroAndHeightIsRelative()
+        public void JapanPlaneRectangular_ZoneOriginIsZeroAndHeightIsAbsolute()
         {
             var origin = new GpsCoordinate(36d, 139d + 50d / 60d, 12d);
             var converter = new CoordinateConverter(origin, CoordinateTransformationMode.JapanPlaneRectangular, JapanPlaneRectangularZone.IX);
             var result = converter.ToUnity(new GpsCoordinate(origin.LatitudeDegrees, origin.LongitudeDegrees, 25d));
             Assert.That(result.x, Is.EqualTo(0f).Within(0.001f));
             Assert.That(result.z, Is.EqualTo(0f).Within(0.001f));
-            Assert.That(result.y, Is.EqualTo(13f).Within(0.001f));
+            Assert.That(result.y, Is.EqualTo(25f).Within(0.001f));
         }
 
         [Test]

@@ -35,20 +35,23 @@ namespace ntk.GeospatialCoordinates.Editor
         {
             serializedObject.Update();
 
-            EditorGUILayout.LabelField("Origin", EditorStyles.boldLabel);
-            EditorGUI.indentLevel++;
-            EditorGUILayout.PropertyField(originLatitude, new GUIContent("Latitude", "WGS84 latitude in degrees."));
-            EditorGUILayout.PropertyField(originLongitude, new GUIContent("Longitude", "WGS84 longitude in degrees."));
-            EditorGUILayout.PropertyField(originHeight, new GUIContent("Ellipsoidal Height", "Ellipsoidal height in metres."));
-            EditorGUI.indentLevel--;
-
-            EditorGUILayout.Space();
             EditorGUILayout.LabelField("Transformation", EditorStyles.boldLabel);
             EditorGUI.indentLevel++;
             EditorGUILayout.PropertyField(mode);
             if ((CoordinateTransformationMode)mode.enumValueIndex == CoordinateTransformationMode.JapanPlaneRectangular)
                 EditorGUILayout.PropertyField(japanZone);
             EditorGUI.indentLevel--;
+
+            if ((CoordinateTransformationMode)mode.enumValueIndex == CoordinateTransformationMode.LocalEnu)
+            {
+                EditorGUILayout.Space();
+                EditorGUILayout.LabelField("Origin", EditorStyles.boldLabel);
+                EditorGUI.indentLevel++;
+                EditorGUILayout.PropertyField(originLatitude, new GUIContent("Latitude", "WGS84 latitude in degrees."));
+                EditorGUILayout.PropertyField(originLongitude, new GUIContent("Longitude", "WGS84 longitude in degrees."));
+                EditorGUILayout.PropertyField(originHeight, new GUIContent("Ellipsoidal Height", "Ellipsoidal height in metres."));
+                EditorGUI.indentLevel--;
+            }
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Current GPS Coordinate", EditorStyles.boldLabel);
