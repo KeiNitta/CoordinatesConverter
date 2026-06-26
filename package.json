@@ -1,0 +1,15 @@
+{
+  "name": "com.ntk.geospatial-coordinates",
+  "version": "1.0.0",
+  "displayName": "Geospatial Coordinates",
+  "description": "WGS84 local ENU and Japan Plane Rectangular coordinate conversion for Unity.",
+  "unity": "2020.3",
+  "author": { "name": "ntk" },
+  "testables": [
+    "ntk.GeospatialCoordinates.Tests"
+  ],
+  "samples": [
+    { "displayName": "Basic Usage", "description": "Create and use a coordinate converter.", "path": "Samples~/BasicUsage" },
+    { "displayName": "Runtime Tests", "description": "Importable EditMode tests for verifying coordinate conversion.", "path": "Samples~/RuntimeTests" }
+  ]
+}

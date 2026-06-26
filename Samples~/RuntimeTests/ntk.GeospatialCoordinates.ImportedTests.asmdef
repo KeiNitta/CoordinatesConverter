@@ -1,0 +1,9 @@
+{
+  "name": "ntk.GeospatialCoordinates.ImportedTests",
+  "rootNamespace": "ntk.GeospatialCoordinates.Tests",
+  "references": ["ntk.GeospatialCoordinates"],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "includePlatforms": ["Editor"],
+  "excludePlatforms": [],
+  "autoReferenced": false
+}
