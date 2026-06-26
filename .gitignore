@@ -1,0 +1,127 @@
+# -----------------------------------------------------------------------------
+# Unity generated folders
+# -----------------------------------------------------------------------------
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Mm]emoryCaptures/
+[Rr]ecordings/
+
+# Unity crash reports
+sysinfo.txt
+
+# Unity generated / cache files
+*.pidb
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.csproj
+*.sln
+*.suo
+*.user
+*.userprefs
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+
+# Unity package manager cache / lock-like local artifacts
+.upmconfig.toml
+
+# -----------------------------------------------------------------------------
+# Rider / JetBrains
+# -----------------------------------------------------------------------------
+.idea/
+*.DotSettings.user
+
+# -----------------------------------------------------------------------------
+# Visual Studio / VS Code
+# -----------------------------------------------------------------------------
+.vs/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# -----------------------------------------------------------------------------
+# macOS
+# -----------------------------------------------------------------------------
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# -----------------------------------------------------------------------------
+# Windows
+# -----------------------------------------------------------------------------
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# -----------------------------------------------------------------------------
+# Linux
+# -----------------------------------------------------------------------------
+*~
+
+# Important:
+# Unity UPM package folders commonly end with "~".
+# Do not ignore these directories.
+!Samples~/
+!Documentation~/
+
+# -----------------------------------------------------------------------------
+# Test / coverage output
+# -----------------------------------------------------------------------------
+TestResults/
+[Tt]est[Rr]esults/
+coverage/
+CoverageReport/
+*.coverage
+*.coveragexml
+*.trx
+junit-results.xml
+
+# -----------------------------------------------------------------------------
+# Logs
+# -----------------------------------------------------------------------------
+*.log
+
+# -----------------------------------------------------------------------------
+# NuGet / .NET generated artifacts
+# -----------------------------------------------------------------------------
+bin/
+obj/
+*.nupkg
+packages/
+.nuget/
+
+# -----------------------------------------------------------------------------
+# Node / tooling artifacts, if any are added later
+# -----------------------------------------------------------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# -----------------------------------------------------------------------------
+# Local environment files
+# -----------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+
+# -----------------------------------------------------------------------------
+# Codex / agent notes
+# -----------------------------------------------------------------------------
+# Keep repository-level instructions and skills tracked:
+#   AGENTS.md
+#   .agents/skills/**/SKILL.md
+#
+# Ignore only personal scratch files if you create them.
+.agent-scratch/
+.codex-scratch/
