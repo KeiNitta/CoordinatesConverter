@@ -1,0 +1,7 @@
+{
+  "name": "ntk.GeospatialCoordinates.Editor",
+  "rootNamespace": "ntk.GeospatialCoordinates.Editor",
+  "references": ["ntk.GeospatialCoordinates"],
+  "includePlatforms": ["Editor"],
+  "autoReferenced": false
+}

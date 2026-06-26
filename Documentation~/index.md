@@ -15,3 +15,9 @@ All computation before `Vector3` is `double`. Unity `Vector3` is float, so use a
 The **Basic Usage** sample contains only `BasicUsageExample.cs`; assign its `target` field to apply a converted ENU position at startup.
 
 The **Runtime Tests** sample contains only the test source and asmdef required by Unity Test Runner. Import it from Package Manager, then run the four tests through **Window > General > Test Runner > EditMode**. No Markdown files are included in either sample, so Unity does not generate `.meta` files for sample documentation on import.
+
+## GameObject component
+
+Add **Geospatial Coordinates > Coordinate Converter** to any GameObject. `CoordinateConverterComponent` exposes origin latitude, longitude, ellipsoidal height, mode, and Japan zone in the Inspector. Its **Current GPS coordinate** fields accept the point to convert. Assign **Target** and enable **Apply Current Coordinate On Start** to set its `localPosition` automatically in Play Mode. If Target is empty, the component moves its own GameObject. From code, call `ToUnity(GpsCoordinate)`, `SetCurrentCoordinate`, `ConvertCurrentCoordinate`, or `ApplyCurrentCoordinate`. If changing the origin, mode, or zone at runtime, call `Rebuild()` before converting the next point.
+
+The Inspector shows **Japan Zone** only when the mode is **Japan Plane Rectangular**. Local ENU does not use that setting.

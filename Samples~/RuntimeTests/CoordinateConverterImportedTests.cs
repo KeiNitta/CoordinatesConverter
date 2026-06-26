@@ -51,5 +51,22 @@ namespace ntk.GeospatialCoordinates.Tests
             Assert.That(result.z, Is.EqualTo(12280.3f).Within(1f));
             Assert.That(result.x, Is.EqualTo(23133.4f).Within(1f));
         }
+
+        [Test]
+        public void Component_ConvertsItsConfiguredOriginToZero()
+        {
+            var gameObject = new GameObject("Coordinate Converter Test");
+            try
+            {
+                var component = gameObject.AddComponent<CoordinateConverterComponent>();
+                component.SetCurrentCoordinate(component.Origin);
+                component.ApplyCurrentCoordinate();
+                Assert.That(gameObject.transform.localPosition.sqrMagnitude, Is.EqualTo(0f).Within(0.000001f));
+            }
+            finally
+            {
+                Object.DestroyImmediate(gameObject);
+            }
+        }
     }
 }

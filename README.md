@@ -16,6 +16,22 @@ Vector3 position = converter.ToUnity(new GpsCoordinate(35.681300d, 139.767200d, 
 
 This uses WGS84 ECEF followed by a local ENU transform. Unity axes are `X = east`, `Y = up`, `Z = north`.
 
+## GameObject component
+
+Add **Geospatial Coordinates > Coordinate Converter** to a GameObject. Set the origin, mode, and Japan zone in the Inspector, then convert from another component:
+
+```csharp
+[SerializeField] private CoordinateConverterComponent converterComponent;
+
+var position = converterComponent.ToUnity(35.681300d, 139.767200d, 42d);
+```
+
+The component also has **Current GPS coordinate** fields. Enter the latitude, longitude, and ellipsoidal height there, assign an optional **Target**, and enable **Apply Current Coordinate On Start** to set its `localPosition` automatically when Play starts. If Target is empty, the component's own GameObject is moved. From code, use `SetCurrentCoordinate(gps)`, `ConvertCurrentCoordinate()`, or `ApplyCurrentCoordinate()`.
+
+**Japan Zone** is shown and used only when the mode is **Japan Plane Rectangular**. It is not used by Local ENU.
+
+Call `Rebuild()` after changing the origin, mode, or zone from code. `ToUnity` rebuilds automatically if it is called before `Awake`.
+
 ## Japan Plane Rectangular
 
 ```csharp
