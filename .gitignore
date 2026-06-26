@@ -15,6 +15,7 @@
 sysinfo.txt
 
 # Unity generated / cache files
+*.meta
 *.pidb
 *.pdb
 *.mdb
