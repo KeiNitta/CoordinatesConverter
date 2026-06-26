@@ -11,6 +11,7 @@ namespace ntk.GeospatialCoordinates.Editor
         private SerializedProperty originHeight;
         private SerializedProperty mode;
         private SerializedProperty japanZone;
+        private SerializedProperty japanDatum;
         private SerializedProperty currentLatitude;
         private SerializedProperty currentLongitude;
         private SerializedProperty currentHeight;
@@ -24,6 +25,7 @@ namespace ntk.GeospatialCoordinates.Editor
             originHeight = serializedObject.FindProperty("originHeightMeters");
             mode = serializedObject.FindProperty("mode");
             japanZone = serializedObject.FindProperty("japanZone");
+            japanDatum = serializedObject.FindProperty("japanDatum");
             currentLatitude = serializedObject.FindProperty("currentLatitudeDegrees");
             currentLongitude = serializedObject.FindProperty("currentLongitudeDegrees");
             currentHeight = serializedObject.FindProperty("currentHeightMeters");
@@ -39,7 +41,18 @@ namespace ntk.GeospatialCoordinates.Editor
             EditorGUI.indentLevel++;
             EditorGUILayout.PropertyField(mode);
             if ((CoordinateTransformationMode)mode.enumValueIndex == CoordinateTransformationMode.JapanPlaneRectangular)
+            {
                 EditorGUILayout.PropertyField(japanZone);
+                EditorGUILayout.PropertyField(japanDatum, new GUIContent("Datum"));
+            }
+            else
+            {
+                using (new EditorGUI.DisabledScope(true))
+                {
+                    EditorGUILayout.PropertyField(japanZone, new GUIContent("Japan Zone"));
+                    EditorGUILayout.PropertyField(japanDatum, new GUIContent("Datum"));
+                }
+            }
             EditorGUI.indentLevel--;
 
             if ((CoordinateTransformationMode)mode.enumValueIndex == CoordinateTransformationMode.LocalEnu)

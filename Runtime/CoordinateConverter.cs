@@ -10,6 +10,8 @@ namespace ntk.GeospatialCoordinates
         private const double Wgs84SemiMajorAxis = 6378137d;
         private const double Wgs84InverseFlattening = 298.257223563d;
         private const double Grs80InverseFlattening = 298.257222101d;
+        private const double BesselSemiMajorAxis = 6377397.155d;
+        private const double BesselInverseFlattening = 299.152813d;
         private readonly GpsCoordinate origin;
         private readonly double originEcefX;
         private readonly double originEcefY;
@@ -26,18 +28,23 @@ namespace ntk.GeospatialCoordinates
         public GpsCoordinate Origin => origin;
         /// <summary>Selected Japan zone. It is relevant only in <see cref="CoordinateTransformationMode.JapanPlaneRectangular"/> mode.</summary>
         public JapanPlaneRectangularZone JapanZone { get; }
+        /// <summary>Selected datum for Japan Plane Rectangular mode.</summary>
+        public JapanPlaneRectangularDatum JapanDatum { get; }
 
         /// <summary>Creates a converter with a fixed origin.</summary>
-        public CoordinateConverter(GpsCoordinate origin, CoordinateTransformationMode mode = CoordinateTransformationMode.LocalEnu, JapanPlaneRectangularZone japanZone = JapanPlaneRectangularZone.IX)
+        public CoordinateConverter(GpsCoordinate origin, CoordinateTransformationMode mode = CoordinateTransformationMode.LocalEnu, JapanPlaneRectangularZone japanZone = JapanPlaneRectangularZone.IX, JapanPlaneRectangularDatum japanDatum = JapanPlaneRectangularDatum.Jgd2011Grs80)
         {
             if (mode != CoordinateTransformationMode.LocalEnu && mode != CoordinateTransformationMode.JapanPlaneRectangular)
                 throw new ArgumentOutOfRangeException(nameof(mode));
             if ((int)japanZone < (int)JapanPlaneRectangularZone.I || (int)japanZone > (int)JapanPlaneRectangularZone.XIX)
                 throw new ArgumentOutOfRangeException(nameof(japanZone));
+            if (japanDatum != JapanPlaneRectangularDatum.Jgd2011Grs80 && japanDatum != JapanPlaneRectangularDatum.TokyoDatumBessel)
+                throw new ArgumentOutOfRangeException(nameof(japanDatum));
 
             this.origin = origin;
             Mode = mode;
             JapanZone = japanZone;
+            JapanDatum = japanDatum;
             ToEcef(origin, Wgs84SemiMajorAxis, Wgs84InverseFlattening, out originEcefX, out originEcefY, out originEcefZ);
             var latitude = origin.LatitudeDegrees * DegreesToRadians;
             var longitude = origin.LongitudeDegrees * DegreesToRadians;
@@ -46,7 +53,7 @@ namespace ntk.GeospatialCoordinates
             sinOriginLongitude = Math.Sin(longitude);
             cosOriginLongitude = Math.Cos(longitude);
             planeProjection = mode == CoordinateTransformationMode.JapanPlaneRectangular
-                ? new JapanPlaneRectangularProjection(japanZone) : null;
+                ? new JapanPlaneRectangularProjection(japanZone, japanDatum) : null;
         }
 
         /// <summary>Converts a GPS coordinate to Unity coordinates. Unity axes are X=east, Y=up, Z=north.</summary>
@@ -92,16 +99,18 @@ namespace ntk.GeospatialCoordinates
             private readonly double[] alpha;
             private readonly double xiOrigin;
 
-            internal JapanPlaneRectangularProjection(JapanPlaneRectangularZone zone)
+            internal JapanPlaneRectangularProjection(JapanPlaneRectangularZone zone, JapanPlaneRectangularDatum datum)
             {
                 GetZoneOrigin(zone, out originLatitude, out originLongitude);
-                var flattening = 1d / Grs80InverseFlattening;
+                var semiMajorAxis = datum == JapanPlaneRectangularDatum.TokyoDatumBessel ? BesselSemiMajorAxis : Wgs84SemiMajorAxis;
+                var inverseFlattening = datum == JapanPlaneRectangularDatum.TokyoDatumBessel ? BesselInverseFlattening : Grs80InverseFlattening;
+                var flattening = 1d / inverseFlattening;
                 n = flattening / (2d - flattening);
                 var n2 = n * n;
                 var n3 = n2 * n;
                 var n4 = n2 * n2;
                 var n5 = n4 * n;
-                aBar = ScaleFactor * Wgs84SemiMajorAxis / (1d + n) * (1d + n2 / 4d + n4 / 64d);
+                aBar = ScaleFactor * semiMajorAxis / (1d + n) * (1d + n2 / 4d + n4 / 64d);
                 alpha = new[] {
                     0d,
                     0.5d * n - (2d / 3d) * n2 + (5d / 16d) * n3 + (41d / 180d) * n4 - (127d / 288d) * n5,

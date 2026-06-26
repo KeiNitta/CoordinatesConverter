@@ -18,6 +18,8 @@ namespace ntk.GeospatialCoordinates
         [SerializeField] private CoordinateTransformationMode mode = CoordinateTransformationMode.LocalEnu;
         [Tooltip("Used only when Mode is Japan Plane Rectangular.")]
         [SerializeField] private JapanPlaneRectangularZone japanZone = JapanPlaneRectangularZone.IX;
+        [Tooltip("Used only when Mode is Japan Plane Rectangular.")]
+        [SerializeField] private JapanPlaneRectangularDatum japanDatum = JapanPlaneRectangularDatum.Jgd2011Grs80;
 
         [Header("Current GPS coordinate (WGS84 degrees / ellipsoidal metres)")]
         [SerializeField] private double currentLatitudeDegrees = 35.681300d;
@@ -35,6 +37,9 @@ namespace ntk.GeospatialCoordinates
 
         /// <summary>Configured Japan Plane Rectangular zone. It is ignored in Local ENU mode.</summary>
         public JapanPlaneRectangularZone JapanZone => japanZone;
+
+        /// <summary>Configured Japan Plane Rectangular datum. It is ignored in Local ENU mode.</summary>
+        public JapanPlaneRectangularDatum JapanDatum => japanDatum;
 
         /// <summary>Configured fixed GPS origin. Height is used only in Local ENU mode.</summary>
         public GpsCoordinate Origin => new GpsCoordinate(originLatitudeDegrees, originLongitudeDegrees, originHeightMeters);
@@ -56,7 +61,7 @@ namespace ntk.GeospatialCoordinates
         /// <summary>Rebuilds the converter after changing Inspector or configuration values.</summary>
         public void Rebuild()
         {
-            converter = new CoordinateConverter(Origin, mode, japanZone);
+            converter = new CoordinateConverter(Origin, mode, japanZone, japanDatum);
         }
 
         /// <summary>Converts a GPS coordinate using the current component configuration.</summary>

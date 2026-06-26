@@ -53,6 +53,17 @@ namespace ntk.GeospatialCoordinates.Tests
         }
 
         [Test]
+        public void JapanPlaneRectangular_TokyoDatumBesselAgreesWithGsiReference()
+        {
+            var coordinate = new GpsCoordinate(35.6813d, 139.7672d);
+            var origin = new GpsCoordinate(36d, 139d + 50d / 60d);
+            var converter = new CoordinateConverter(origin, CoordinateTransformationMode.JapanPlaneRectangular, JapanPlaneRectangularZone.IX, JapanPlaneRectangularDatum.TokyoDatumBessel);
+            var result = converter.ToUnity(coordinate);
+            Assert.That(result.z, Is.EqualTo(-35352.3883f).Within(0.01f));
+            Assert.That(result.x, Is.EqualTo(-5985.4113f).Within(0.01f));
+        }
+
+        [Test]
         public void Component_ConvertsItsConfiguredOriginToZero()
         {
             var gameObject = new GameObject("Coordinate Converter Test");
