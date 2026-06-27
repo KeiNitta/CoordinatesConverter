@@ -43,9 +43,10 @@ The GRS80/JGD-compatible GSI transverse-Mercator formulation supports zones I th
 
 Select `JapanPlaneRectangularDatum.Jgd2011Grs80` (the default) for ordinary WGS84/GNSS input. Select `JapanPlaneRectangularDatum.TokyoDatumBessel` only when the input latitude and longitude are explicitly in the legacy Japanese geodetic datum (Tokyo Datum). In Tokyo Datum mode, do not pass WGS84 coordinates unless you transform them first. Datum selection changes the projection ellipsoid; it does not transform coordinates between datums.
 
-## 原典・References
+## References
 
-Japan Plane Rectangular implementation reference: [国土地理院（GSI）「平面直角座標系」計算資料（PDF）](https://www.gsi.go.jp/common/000061216.pdf). The implementation uses the document's GRS80-compatible ellipsoid, the `0.9999` scale factor, zone origins I–XIX, and the Gauss-Krüger / transverse-Mercator forward-projection formulation. This package is an independent implementation and is not affiliated with GSI.
+Japan Plane Rectangular implementation reference: [河瀬和重 (2011): Gauss-Krüger投影における経緯度座標及び平面直角座標相互間の座標換算についての
+より簡明な計算方法，国土地理院時報，121，109–124，doi: 10.57499/JOURNAL_121_12](https://www.gsi.go.jp/common/000061216.pdf). The implementation uses the document's GRS80-compatible ellipsoid, the `0.9999` scale factor, zone origins I–XIX, and the Gauss-Krüger / transverse-Mercator forward-projection formulation. This package is an independent implementation and is not affiliated with GSI.
 
 ## Precision
 
