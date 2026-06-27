@@ -15,7 +15,6 @@
 sysinfo.txt
 
 # Unity generated / cache files
-*.meta
 *.pidb
 *.pdb
 *.mdb
@@ -29,6 +28,8 @@ sysinfo.txt
 *.pidb.meta
 *.pdb.meta
 *.mdb.meta
+*.md.meta
+*.json.meta
 
 # Unity package manager cache / lock-like local artifacts
 .upmconfig.toml
