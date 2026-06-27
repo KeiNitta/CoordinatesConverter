@@ -1,7 +1,7 @@
 {
-  "name": "com.ntk.geospatial-coordinates",
-  "version": "1.0.0",
-  "displayName": "Geospatial Coordinates",
+  "name": "com.ntk.coordinates-converter",
+  "version": "1.0.1",
+  "displayName": "Coordinate Converter",
   "description": "WGS84 local ENU and Japan Plane Rectangular coordinate conversion for Unity.",
   "unity": "2020.3",
   "author": { "name": "ntk" },
